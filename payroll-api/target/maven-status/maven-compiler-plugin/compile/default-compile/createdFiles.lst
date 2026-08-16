@@ -1,0 +1,3 @@
+com\entic\payroll\api\infrastructure\dto\errors\ErrorFieldResponse.class
+com\entic\payroll\api\infrastructure\adapters\out\advice\GlobalExceptionHandler.class
+com\entic\payroll\api\config\I18nConfig.class

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="payroll-core" />
+        <module name="payroll-security" />
+        <module name="payroll-shared" />
+        <module name="payroll-persistence" />
+        <module name="payroll-api" />
+        <module name="payroll-electronic" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="payroll-api" options="-parameters" />
+      <module name="payroll-core" options="-parameters" />
+      <module name="payroll-electronic" options="-parameters" />
+      <module name="payroll-persistence" options="-parameters" />
+      <module name="payroll-security" options="-parameters" />
+      <module name="payroll-shared" options="-parameters" />
+    </option>
+  </component>
+</project>

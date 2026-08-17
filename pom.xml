@@ -24,13 +24,24 @@
         <module>payroll-shared</module>
         <module>payroll-electronic</module>
         <module>payroll-persistence</module>
+        <module>payroll-app</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.entic.payroll</groupId>
+                <artifactId>payroll-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.entic.payroll</groupId>
                 <artifactId>payroll-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.entic.payroll</groupId>
+                <artifactId>payroll-persistence</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

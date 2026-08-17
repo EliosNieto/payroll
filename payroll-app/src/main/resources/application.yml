@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: entic-payroll
+
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:h2:mem:payroll;DB_CLOSE_DELAY=-1}
+    username: ${DATASOURCE_USERNAME:sa}
+    password: ${DATASOURCE_PASSWORD:}
+    driver-class-name: ${DATASOURCE_DRIVER:org.h2.Driver}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:create-drop}
+    open-in-view: false
+
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

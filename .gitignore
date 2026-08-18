@@ -19,3 +19,12 @@ Thumbs.db
 
 # Logs
 *.log
+
+data.txt
+error.txt
+
+#Test
+payroll-core/target/
+
+doc/
+        

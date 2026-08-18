@@ -1,5 +1,13 @@
 F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\application\commons\errors\ApplicationError.java
 F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\application\commons\errors\ApplicationErrorSpec.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\application\company\CreateCompanyCommand.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\application\company\CreateCompanyService.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\application\company\port\out\CompanyRepositoryPort.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\company\Company.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\enums\ConceptNature.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\enums\NoveltyType.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\enums\OvertimeType.java
+F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\enums\RiskLevel.java
 F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\errors\AlreadyExistsException.java
 F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\errors\AuthException.java
 F:\ENTIC\Proyecto\payroll\payroll-core\src\main\java\com\entic\payroll\core\domain\errors\NotFoundException.java

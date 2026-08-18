@@ -1,3 +1,7 @@
+com\entic\payroll\api\infrastructure\dto\company\CreateCompanyRequest.class
+com\entic\payroll\api\infrastructure\mapper\CompanyApiMapper.class
+com\entic\payroll\api\infrastructure\dto\company\CompanyResponse.class
 com\entic\payroll\api\infrastructure\dto\errors\ErrorFieldResponse.class
-com\entic\payroll\api\infrastructure\adapters\out\advice\GlobalExceptionHandler.class
+com\entic\payroll\api\infrastructure\adapters\out\controller\CompanyController.class
 com\entic\payroll\api\config\I18nConfig.class
+com\entic\payroll\api\infrastructure\adapters\out\advice\GlobalExceptionHandler.class

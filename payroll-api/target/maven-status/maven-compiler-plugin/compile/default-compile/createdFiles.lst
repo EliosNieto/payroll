@@ -1,3 +1,6 @@
+com\entic\payroll\api\infrastructure\commons\executor\UseCaseHttpExecutor.class
+com\entic\payroll\api\infrastructure\dto\company\UpdateCompanyRequest.class
+com\entic\payroll\api\infrastructure\commons\executor\HttpResponseTransformer.class
 com\entic\payroll\api\infrastructure\dto\company\CreateCompanyRequest.class
 com\entic\payroll\api\infrastructure\mapper\CompanyApiMapper.class
 com\entic\payroll\api\infrastructure\dto\company\CompanyResponse.class

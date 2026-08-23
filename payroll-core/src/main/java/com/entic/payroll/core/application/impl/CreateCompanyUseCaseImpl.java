@@ -1,23 +1,26 @@
-package com.entic.payroll.core.application.company;
+package com.entic.payroll.core.application.impl;
 
-import com.entic.payroll.core.application.company.port.out.CompanyRepositoryPort;
+import com.entic.payroll.core.application.models.CreateCompanyUseCaseIn;
+import com.entic.payroll.core.application.models.CreateCompanyUseCaseOut;
+import com.entic.payroll.core.application.port.in.CreateCompanyUseCase;
+import com.entic.payroll.core.application.port.out.CompanyRepositoryPort;
 import com.entic.payroll.core.domain.company.Company;
 import com.entic.payroll.core.domain.errors.AlreadyExistsException;
 import com.entic.payroll.core.domain.errors.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CreateCompanyService {
-
-    private static final Logger log = LoggerFactory.getLogger(CreateCompanyService.class);
+public class CreateCompanyUseCaseImpl implements CreateCompanyUseCase {
+    private static final Logger log = LoggerFactory.getLogger(CreateCompanyUseCaseImpl.class);
 
     private final CompanyRepositoryPort repositoryPort;
 
-    public CreateCompanyService(CompanyRepositoryPort repositoryPort) {
+    public CreateCompanyUseCaseImpl(CompanyRepositoryPort repositoryPort) {
         this.repositoryPort = repositoryPort;
     }
 
-    public Company execute(CreateCompanyCommand command) {
+    @Override
+    public CreateCompanyUseCaseOut execute(CreateCompanyUseCaseIn command) {
         log.info("Creating company with NIT: {}", command.nit());
 
         validateNit(command.nit());
@@ -28,7 +31,7 @@ public class CreateCompanyService {
         Company saved = repositoryPort.save(company);
 
         log.info("Company created with id: {}", saved.getId());
-        return saved;
+        return new CreateCompanyUseCaseOut(toCompanyCreated(saved));
     }
 
     private void validateNit(String nit) {
@@ -47,5 +50,9 @@ public class CreateCompanyService {
         if (repositoryPort.existsByNit(nit)) {
             throw new AlreadyExistsException("nit", nit, "company.nit.alreadyExists");
         }
+    }
+
+    private CreateCompanyUseCaseOut.CompanyCreated toCompanyCreated(Company company){
+        return new CreateCompanyUseCaseOut.CompanyCreated(company.getId(), company.getNit(), company.getLegalName(), company.isPayrollTaxExempt(), company.isActive());
     }
 }

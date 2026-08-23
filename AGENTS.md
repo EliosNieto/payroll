@@ -49,3 +49,99 @@ Multi-module Maven project (Java 21, Spring Boot 3.5.5):
 - `payroll-security` and `payroll-electronic` have only their `pom.xml` (empty modules).
 - The i18n coverage test fails if a key used in `payroll-core` has no entry in `messages.properties`.
 - JPA persistence is pending (see `jpa.md`): when created, use Flyway with `spring.jpa.hibernate.ddl-auto=validate` and English naming for tables/columns.
+
+## Use Case Structure
+
+Every CRUD operation follows the ENTIC hexagonal pattern. Use case names use the format `{Verb}{Entity}` (e.g. `CreateCompany`, `GetCompanyById`).
+
+### CREATE pattern
+
+```
+payroll-core/
+├── application/commons/operation/
+│   ├── ApplicationRequest.java          (marker interface)
+│   ├── ApplicationResponse.java         (marker interface)
+│   └── ApplicationUseCase.java          (functional interface: execute(IN) → OUT)
+├── application/models/
+│   ├── Create{Entity}UseCaseIn.java     (record implements ApplicationRequest)
+│   └── Create{Entity}UseCaseOut.java    (record implements ApplicationResponse, wraps nested DTO)
+├── application/port/in/
+│   └── Create{Entity}UseCase.java       (interface extends ApplicationUseCase<In, Out>)
+├── application/impl/
+│   └── Create{Entity}UseCaseImpl.java   (implementation, validates, calls port, returns Out)
+└── application/port/out/
+    └── {Entity}RepositoryPort.java      (save, existsByXxx, etc.)
+
+payroll-api/
+├── infrastructure/adapters/out/controller/
+│   └── {Entity}Controller.java          (POST uses useCaseHttpExecutor.execute(useCase, input, transformer))
+└── infrastructure/mapper/
+    └── {Entity}ApiMapper.java           (toCommand, toResponse)
+
+payroll-app/
+└── config/{Entity}Config.java           (@Bean wiring: port → adapter, useCase → impl)
+```
+
+**Controller pattern for CREATE:**
+```java
+@PostMapping
+public ResponseEntity<?> create(@RequestBody Create{Entity}Request request) {
+    return useCaseHttpExecutor.execute(createUseCase,
+        {Entity}ApiMapper.toCommand(request),
+        out -> {
+            URI location = URI.create("/" + entities + "/" + out.{entityCreated}().id());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .location(location)
+                    .body(out.{entityCreated}());
+        });
+}
+```
+
+### GET BY ID pattern
+
+```
+payroll-core/
+├── application/models/
+│   ├── Get{Entity}ByIdUseCaseIn.java    (record(UUID id) implements ApplicationRequest)
+│   └── Get{Entity}ByIdUseCaseOut.java   (record({Entity}Found) implements ApplicationResponse)
+├── application/port/in/
+│   └── Get{Entity}ByIdUseCase.java      (interface extends ApplicationUseCase<In, Out>)
+└── application/impl/
+    └── Get{Entity}ByIdUseCaseImpl.java  (validates id, calls findById, throws NotFoundException)
+```
+
+**Controller pattern for GET:**
+```java
+@GetMapping("/{id}")
+public ResponseEntity<?> getById(@PathVariable UUID id) {
+    return useCaseHttpExecutor.execute(getByIdUseCase, new Get{Entity}ByIdUseCaseIn(id));
+}
+```
+
+### Outbound Port pattern
+
+```java
+public interface {Entity}RepositoryPort {
+    {Entity} save({Entity} entity);
+    {Entity} findById(UUID id);           // throws NotFoundException
+    boolean existsByXxx(String xxx);      // for uniqueness checks
+}
+```
+
+### i18n keys
+
+```
+{entity}.id.required={Entity} ID is required
+{entity}.notFound={Entity} with ID {0} not found
+{entity}.xxx.required=Xxx is required
+{entity}.xxx.alreadyExists=A {entity} with Xxx {0} already exists
+```
+
+### Key conventions
+
+- **Models** go in `application/models/` (not in the entity sub-package).
+- **Ports** go in `application/port/in/` (use case interfaces) and `application/port/out/` (repository interfaces).
+- **Impls** go in `application/impl/` (not in the entity sub-package).
+- **Inbound ports** (use case interfaces) are thin — just `extends ApplicationUseCase<In, Out>`.
+- **Transformer**: CREATE uses `HttpResponseTransformer` (for Location header, 201). GET uses direct `execute(useCase, in)` (returns 200 with response body).
+- **No annotations** in core — no `@Service`, `@Component`. Wiring is manual via `@Configuration` beans in `payroll-app`.

@@ -1,7 +1,10 @@
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\config\I18nConfig.java
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\adapters\out\advice\GlobalExceptionHandler.java
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\adapters\out\controller\CompanyController.java
+F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\commons\executor\HttpResponseTransformer.java
+F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\commons\executor\UseCaseHttpExecutor.java
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\dto\company\CompanyResponse.java
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\dto\company\CreateCompanyRequest.java
+F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\dto\company\UpdateCompanyRequest.java
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\dto\errors\ErrorFieldResponse.java
 F:\ENTIC\Proyecto\payroll\payroll-api\src\main\java\com\entic\payroll\api\infrastructure\mapper\CompanyApiMapper.java

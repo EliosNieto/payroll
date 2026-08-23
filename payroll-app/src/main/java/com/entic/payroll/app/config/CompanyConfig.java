@@ -1,7 +1,12 @@
 package com.entic.payroll.app.config;
 
-import com.entic.payroll.core.application.company.CreateCompanyService;
-import com.entic.payroll.core.application.company.port.out.CompanyRepositoryPort;
+import com.entic.payroll.core.application.impl.CreateCompanyUseCaseImpl;
+import com.entic.payroll.core.application.impl.GetCompanyByIdUseCaseImpl;
+import com.entic.payroll.core.application.impl.UpdateCompanyUseCaseImpl;
+import com.entic.payroll.core.application.port.in.CreateCompanyUseCase;
+import com.entic.payroll.core.application.port.in.GetCompanyByIdUseCase;
+import com.entic.payroll.core.application.port.in.UpdateCompanyUseCase;
+import com.entic.payroll.core.application.port.out.CompanyRepositoryPort;
 import com.entic.payroll.persistence.adapter.out.CompanyPersistenceAdapter;
 import com.entic.payroll.persistence.repository.CompanyJpaRepository;
 import org.slf4j.Logger;
@@ -21,8 +26,20 @@ public class CompanyConfig {
     }
 
     @Bean
-    public CreateCompanyService createCompanyService(CompanyRepositoryPort port) {
+    public CreateCompanyUseCase createCompanyService(CompanyRepositoryPort port) {
         log.info("Wiring CreateCompanyService");
-        return new CreateCompanyService(port);
+        return new CreateCompanyUseCaseImpl(port);
+    }
+
+    @Bean
+    public GetCompanyByIdUseCase getCompanyByIdUseCase(CompanyRepositoryPort port) {
+        log.info("Wiring GetCompanyByIdUseCase");
+        return new GetCompanyByIdUseCaseImpl(port);
+    }
+
+    @Bean
+    public UpdateCompanyUseCase updateCompanyUseCase(CompanyRepositoryPort port) {
+        log.info("Wiring UpdateCompanyUseCase");
+        return new UpdateCompanyUseCaseImpl(port);
     }
 }

@@ -27,6 +27,10 @@ public class Company {
         return new Company(id, nit, legalName, payrollTaxExempt, active);
     }
 
+    public Company update(String nit, String legalName, boolean payrollTaxExempt) {
+        return new Company(this.id, nit, legalName, payrollTaxExempt, this.active);
+    }
+
     public UUID getId() {
         return id;
     }

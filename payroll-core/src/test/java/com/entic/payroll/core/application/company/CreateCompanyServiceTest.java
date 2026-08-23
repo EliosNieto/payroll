@@ -1,10 +1,15 @@
 package com.entic.payroll.core.application.company;
 
-import com.entic.payroll.core.application.company.port.out.CompanyRepositoryPort;
+import com.entic.payroll.core.application.impl.CreateCompanyUseCaseImpl;
+import com.entic.payroll.core.application.models.CreateCompanyUseCaseIn;
+import com.entic.payroll.core.application.models.CreateCompanyUseCaseOut;
+import com.entic.payroll.core.application.port.out.CompanyRepositoryPort;
 import com.entic.payroll.core.domain.company.Company;
 import com.entic.payroll.core.domain.errors.AlreadyExistsException;
 import com.entic.payroll.core.domain.errors.ValidationException;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -12,17 +17,17 @@ import static org.mockito.Mockito.*;
 class CreateCompanyServiceTest {
 
     private final CompanyRepositoryPort repositoryPort = mock(CompanyRepositoryPort.class);
-    private final CreateCompanyService service = new CreateCompanyService(repositoryPort);
+    private final CreateCompanyUseCaseImpl service = new CreateCompanyUseCaseImpl(repositoryPort);
 
     @Test
     void shouldCreateCompanySuccessfully() {
-        CreateCompanyCommand command = new CreateCompanyCommand("900123456", "Acme Corp", false);
+        CreateCompanyUseCaseIn command = new CreateCompanyUseCaseIn("900123456", "Acme Corp", false);
 
         when(repositoryPort.existsByNit("900123456")).thenReturn(false);
         when(repositoryPort.save(any(Company.class))).thenAnswer(invocation -> {
             Company c = invocation.getArgument(0);
             return Company.reconstitute(
-                    java.util.UUID.randomUUID(),
+                    UUID.randomUUID(),
                     c.getNit(),
                     c.getLegalName(),
                     c.isPayrollTaxExempt(),
@@ -30,20 +35,21 @@ class CreateCompanyServiceTest {
             );
         });
 
-        Company result = service.execute(command);
+        CreateCompanyUseCaseOut result = service.execute(command);
 
         assertNotNull(result);
-        assertNotNull(result.getId());
-        assertEquals("900123456", result.getNit());
-        assertEquals("Acme Corp", result.getLegalName());
-        assertFalse(result.isPayrollTaxExempt());
-        assertTrue(result.isActive());
+        assertNotNull(result.companyCreated());
+        assertNotNull(result.companyCreated().id());
+        assertEquals("900123456", result.companyCreated().nit());
+        assertEquals("Acme Corp", result.companyCreated().legalName());
+        assertFalse(result.companyCreated().payrollTaxExempt());
+        assertTrue(result.companyCreated().active());
         verify(repositoryPort).save(any(Company.class));
     }
 
     @Test
     void shouldFailWhenNitIsNull() {
-        CreateCompanyCommand command = new CreateCompanyCommand(null, "Acme Corp", false);
+        CreateCompanyUseCaseIn command = new CreateCompanyUseCaseIn(null, "Acme Corp", false);
 
         ValidationException ex = assertThrows(ValidationException.class, () -> service.execute(command));
         assertEquals("company.nit.required", ex.getMessage());
@@ -52,7 +58,7 @@ class CreateCompanyServiceTest {
 
     @Test
     void shouldFailWhenNitIsBlank() {
-        CreateCompanyCommand command = new CreateCompanyCommand("  ", "Acme Corp", false);
+        CreateCompanyUseCaseIn command = new CreateCompanyUseCaseIn("  ", "Acme Corp", false);
 
         ValidationException ex = assertThrows(ValidationException.class, () -> service.execute(command));
         assertEquals("company.nit.required", ex.getMessage());
@@ -61,7 +67,7 @@ class CreateCompanyServiceTest {
 
     @Test
     void shouldFailWhenLegalNameIsNull() {
-        CreateCompanyCommand command = new CreateCompanyCommand("900123456", null, false);
+        CreateCompanyUseCaseIn command = new CreateCompanyUseCaseIn("900123456", null, false);
 
         ValidationException ex = assertThrows(ValidationException.class, () -> service.execute(command));
         assertEquals("company.legalName.required", ex.getMessage());
@@ -70,7 +76,7 @@ class CreateCompanyServiceTest {
 
     @Test
     void shouldFailWhenLegalNameIsBlank() {
-        CreateCompanyCommand command = new CreateCompanyCommand("900123456", "  ", false);
+        CreateCompanyUseCaseIn command = new CreateCompanyUseCaseIn("900123456", "  ", false);
 
         ValidationException ex = assertThrows(ValidationException.class, () -> service.execute(command));
         assertEquals("company.legalName.required", ex.getMessage());
@@ -79,7 +85,7 @@ class CreateCompanyServiceTest {
 
     @Test
     void shouldFailWhenNitAlreadyExists() {
-        CreateCompanyCommand command = new CreateCompanyCommand("900123456", "Acme Corp", false);
+        CreateCompanyUseCaseIn command = new CreateCompanyUseCaseIn("900123456", "Acme Corp", false);
 
         when(repositoryPort.existsByNit("900123456")).thenReturn(true);
 
